@@ -10,11 +10,11 @@ body.night .status{color:#cbd6e4}.panel.nav-hidden{display:none}.search-reopen{p
 .speed-stack{position:absolute;z-index:5;bottom:calc(92px + env(safe-area-inset-bottom));left:12px;display:grid;gap:7px}.speed-stack .speed{position:static}.limit-sign{border:5px solid #d5232e;border-radius:50%;width:65px;height:65px;background:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#222}.limit-sign.unknown{font-size:11px;text-align:center;border-color:#a8b1be}.cam-notice{position:absolute;z-index:5;top:calc(98px + env(safe-area-inset-top));right:12px;background:#fff7df;color:#533500;border-radius:12px;padding:8px;display:none;max-width:170px;font-weight:700}.cam-notice.visible{display:block}
 .settings-toggle{font-size:13px;display:flex;align-items:center;gap:8px;padding:6px}.settings-toggle input{width:auto;flex:none}
 .car-pin{width:68px!important;height:74px!important;overflow:visible!important;filter:drop-shadow(0 3px 3px #0007)!important}.car-pin img{width:68px;height:74px;object-fit:contain;display:block;transform:none!important}.car-pin.nightcar:before{content:"";position:absolute;top:-22px;left:10px;width:48px;height:45px;background:linear-gradient(to top,#fff3a14d,transparent);filter:blur(8px);pointer-events:none}
-#vehicleOverlay{position:absolute;z-index:4;left:50%;top:75%;transform:translate(-50%,-50%);width:68px;height:74px;pointer-events:none;display:none;filter:drop-shadow(0 3px 4px #0007)}#vehicleOverlay img{width:100%;height:100%;object-fit:contain}#vehicleOverlay{width:148px;height:165px}#bmw3dCanvas{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none}#vehicleOverlay.has-3d #bmw3dCanvas{display:block}#vehicleOverlay.has-3d #bmwFallback{display:none}#vehicleOverlay.nightcar:before{content:"";position:absolute;left:9px;top:-50px;width:50px;height:60px;background:linear-gradient(to top,#fff9c58c 0%,#fff8c447 40%,transparent 100%);filter:blur(9px)}#vehicleOverlay.nightcar:after{content:none}
+#vehicleOverlay{position:absolute;z-index:4;left:50%;top:75%;transform:translate(-50%,-50%);width:68px;height:74px;pointer-events:none;display:none;filter:drop-shadow(0 3px 4px #0007)}#vehicleOverlay img{width:100%;height:100%;object-fit:contain}#vehicleOverlay{width:126px;height:141px}#bmw3dCanvas{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none}#vehicleOverlay.has-3d #bmw3dCanvas{display:block}#vehicleOverlay.has-3d:not(.nightcar)::before{content:"";position:absolute;z-index:-1;left:43%;top:25%;width:14%;height:65%;border-radius:15px;background:#eeeab0;opacity:.85;pointer-events:none}#vehicleOverlay.has-3d #bmwFallback{display:none}#vehicleOverlay.nightcar:before{content:"";position:absolute;left:9px;top:-50px;width:50px;height:60px;background:linear-gradient(to top,#fff9c58c 0%,#fff8c447 40%,transparent 100%);filter:blur(9px)}#vehicleOverlay.nightcar:after{content:none}
 .guidance{top:calc(68px + env(safe-area-inset-top))!important;left:12px!important;right:12px!important;padding:9px 12px!important;border-radius:13px!important;max-height:75px;overflow:hidden;background:#102f58!important}.guidance strong{font-size:14px!important;font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.guidance #nextDistance{font-size:18px;font-weight:800;margin-top:1px}body.night .guidance{background:#0b2241!important}
 #zoomControls{position:absolute;z-index:8;right:13px;top:42%;display:grid;gap:8px}#zoomControls button{background:#fff;color:#183858;font-size:26px;width:49px;height:49px;padding:0;box-shadow:0 3px 12px #0004}
 .cam-marker{font-size:23px;background:#fff;border:2px solid #db4141;border-radius:50%;width:35px;height:35px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px #0005}
-</style></head><body><div id="map"></div><div id="vehicleOverlay"><img id="bmwFallback" src="bmw_x5_retro.png" alt="BMW X5 nera"><canvas id="bmw3dCanvas" aria-label="BMW X5 modello tridimensionale"></canvas></div><div class="panel" id="searchPanel"><div class="brand">🚘 Maba Navigator · V15.5 · BMW + edifici 3D</div><div class="route-form"><div class="route-fields"><label class="field"><span class="dot start-dot"></span><input id="start" placeholder="Partenza: posizione GPS" aria-label="Indirizzo di partenza"></label><label class="field"><span class="dot end-dot"></span><input id="destination" placeholder="Dove vuoi andare?" aria-label="Destinazione"></label></div><button id="swap" class="swap" title="Inverti partenza e arrivo" aria-label="Inverti partenza e arrivo">⇅</button></div><button id="simStart" class="plan-button" style="background:#152d45;margin-bottom:5px">▶ Simula Terento → Brunico</button><button id="go" class="plan-button">↗ Calcola percorso</button><div class="status" id="status">Inserisci la destinazione. Lascia vuota la partenza per usare il GPS.</div></div><button id="reopenSearch" class="search-reopen">🔎 Destinazione</button><div class="cam-notice" id="camNotice"></div><div class="map-panel" id="mapPanel"><div class="vehicle-title">Modalità mappa</div><button data-mapmode="road2d">🗺️ Stradale 2D</button><button data-mapmode="road3d">⛰️ Stradale 3D + edifici</button><button data-mapmode="sat3d">🌍 Satellitare 3D + edifici</button><div class="map-hint">Il 3D richiede Internet e dati di elevazione. Edifici dove disponibili.</div><label class="settings-toggle"><input id="autoZoom" type="checkbox" checked> Zoom automatico</label><label class="settings-toggle"><input id="cameraVoice" type="checkbox" checked> Avvisi vocali autovelox</label><label class="settings-toggle"><input id="speedAlarm" type="checkbox"> Avviso sonoro superamento limite</label><label class="settings-toggle">Aspetto <select id="themeSelect"><option value="auto">Automatico</option><option value="day">Giorno</option><option value="night">Notte</option></select></label><button id="mapKey" class="key-settings">🔑 Configura MapTiler</button><button id="closeMaps" class="close-maps">Chiudi</button></div><div class="key-modal" id="keyModal"><h3>🔑 Collega MapTiler</h3><p>Incolla la chiave API creata su MapTiler Cloud. Rimarrà memorizzata soltanto nel browser di questo telefono. La chiave deve autorizzare il dominio Netlify del navigatore.</p><input id="keyInput" placeholder="Incolla la chiave MapTiler" autocomplete="off" spellcheck="false"><button id="saveKey">Attiva mappe 3D</button><p id="keyMessage">Se non inserisci la chiave, rimane disponibile la mappa stradale 2D di emergenza.</p></div><div class="vehicle-panel" id="vehiclePanel"><button class="vehicle-close" id="closeVehicles" aria-label="Chiudi">×</button><div class="vehicle-title">Scegli il tuo veicolo</div><div class="vehicle-sub">BMW X5 F15 M Sport 2017 · nera</div><div class="vehicle-grid" id="vehicleGrid"></div></div><div id="guidance" class="guidance"><strong id="instruction">Segui il percorso</strong><div id="nextDistance"></div></div><div class="speed-stack"><div id="limitSign" class="limit-sign unknown">Limite<br>n.d.</div><div class="speed" id="speed">-- km/h</div></div><div class="trip" id="trip"><span id="tripDetails"></span><button id="stopNav">Termina</button></div><div id="simControls" style="display:none;position:absolute;z-index:10;left:12px;right:80px;bottom:calc(16px + env(safe-area-inset-bottom));background:#132b42;color:white;border-radius:15px;padding:10px;align-items:center;gap:9px"><strong>🚗 SIMULAZIONE</strong><select id="simSpeed" style="max-width:100px"><option value="1">1×</option><option value="3" selected>3×</option><option value="8">8×</option></select><button id="simStop" style="background:#c72b38">Stop</button></div><div id="zoomControls"><button id="zoomIn" aria-label="Zoom avanti">+</button><button id="zoomOut" aria-label="Zoom indietro">−</button></div><div class="actions"><button class="secondary" id="mode" title="Scegli modalità mappa" aria-label="Scegli modalità mappa">Mappe</button><button class="secondary" id="vehicles" title="Scegli auto" aria-label="Scegli auto">🚘</button><button id="locate" title="La mia posizione" aria-label="La mia posizione">⌖</button><button class="secondary" id="clear" title="Cancella percorso" aria-label="Cancella percorso">×</button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script>
+</style></head><body><div id="map"></div><div id="vehicleOverlay"><img id="bmwFallback" src="bmw_x5_retro.png" alt="BMW X5 nera"><canvas id="bmw3dCanvas" aria-label="BMW X5 modello tridimensionale"></canvas></div><div class="panel" id="searchPanel"><div class="brand">🚘 Maba Navigator · BMW 2019</div><div class="route-form"><div class="route-fields"><label class="field"><span class="dot start-dot"></span><input id="start" placeholder="Partenza: posizione GPS" aria-label="Indirizzo di partenza"></label><label class="field"><span class="dot end-dot"></span><input id="destination" placeholder="Dove vuoi andare?" aria-label="Destinazione"></label></div><button id="swap" class="swap" title="Inverti partenza e arrivo" aria-label="Inverti partenza e arrivo">⇅</button></div><button id="simStart" class="plan-button" style="background:#152d45;margin-bottom:5px">▶ Simula Terento → Brunico</button><button id="go" class="plan-button">↗ Calcola percorso</button><div class="status" id="status">Inserisci la destinazione. Lascia vuota la partenza per usare il GPS.</div></div><button id="reopenSearch" class="search-reopen">🔎 Destinazione</button><div class="cam-notice" id="camNotice"></div><div class="map-panel" id="mapPanel"><div class="vehicle-title">Modalità mappa</div><button data-mapmode="road2d">🗺️ Stradale 2D</button><button data-mapmode="road3d">⛰️ Stradale 3D + edifici</button><button data-mapmode="sat3d">🌍 Satellitare 3D + edifici</button><div class="map-hint">Edifici e rilievi reali richiedono una chiave MapTiler valida, configurabile qui sotto.</div><label class="settings-toggle"><input id="autoZoom" type="checkbox" checked> Zoom automatico</label><label class="settings-toggle"><input id="cameraVoice" type="checkbox" checked> Avvisi vocali autovelox</label><label class="settings-toggle"><input id="speedAlarm" type="checkbox"> Avviso sonoro superamento limite</label><label class="settings-toggle">Aspetto <select id="themeSelect"><option value="auto">Automatico</option><option value="day">Giorno</option><option value="night">Notte</option></select></label><button id="mapKey" class="key-settings">🔑 Configura MapTiler</button><button id="closeMaps" class="close-maps">Chiudi</button></div><div class="key-modal" id="keyModal"><h3>🔑 Collega MapTiler</h3><p>Incolla la chiave API creata su MapTiler Cloud. Rimarrà memorizzata soltanto nel browser di questo telefono. La chiave deve autorizzare il dominio giuseppem974-rgb.github.io.</p><input id="keyInput" placeholder="Incolla la chiave MapTiler" autocomplete="off" spellcheck="false"><button id="saveKey">Attiva mappe 3D</button><p id="keyMessage">Se non inserisci la chiave, rimane disponibile la mappa stradale 2D di emergenza.</p></div><div class="vehicle-panel" id="vehiclePanel"><button class="vehicle-close" id="closeVehicles" aria-label="Chiudi">×</button><div class="vehicle-title">Scegli il tuo veicolo</div><div class="vehicle-sub">BMW X5 xDrive30d 2019 · nera metallizzata</div><div class="vehicle-grid" id="vehicleGrid"></div></div><div id="guidance" class="guidance"><strong id="instruction">Segui il percorso</strong><div id="nextDistance"></div></div><div class="speed-stack"><div id="limitSign" class="limit-sign unknown">Limite<br>n.d.</div><div class="speed" id="speed">-- km/h</div></div><div class="trip" id="trip"><span id="tripDetails"></span><button id="stopNav">Termina</button></div><div id="simControls" style="display:none;position:absolute;z-index:10;left:12px;right:80px;bottom:calc(16px + env(safe-area-inset-bottom));background:#132b42;color:white;border-radius:15px;padding:10px;align-items:center;gap:9px"><strong>🚗 SIMULAZIONE</strong><select id="simSpeed" style="max-width:100px"><option value="1">1×</option><option value="3" selected>3×</option><option value="8">8×</option></select><button id="simStop" style="background:#c72b38">Stop</button></div><div id="zoomControls"><button id="zoomIn" aria-label="Zoom avanti">+</button><button id="zoomOut" aria-label="Zoom indietro">−</button></div><div class="actions"><button class="secondary" id="mode" title="Scegli modalità mappa" aria-label="Scegli modalità mappa">Mappe</button><button class="secondary" id="vehicles" title="Scegli auto" aria-label="Scegli auto">🚘</button><button id="locate" title="La mia posizione" aria-label="La mia posizione">⌖</button><button class="secondary" id="clear" title="Cancella percorso" aria-label="Cancella percorso">×</button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script>
 const $=id=>document.getElementById(id),status=$('status');function msg(t){status.textContent=t}
 const vehicles={bmw:'BMW X5 M Sport',arrow:'Freccia',city:'Utilitaria',sedan:'Berlina',suv:'SUV',sport:'Sportiva',van:'Furgone'};let selected=localStorage.getItem('mabaVehicleV3')||'bmw';if(!vehicles[selected])selected='bmw';let is3d=localStorage.getItem('maba3d')==='true';let mapMode=localStorage.getItem('mabaDemoMapMode')||'road3d';is3d=mapMode!=='road2d';
 let mapKey=localStorage.getItem('mabaMapTilerKey')||'';let mapStyleType='fallback';let styleSwitching=false;const map=new maplibregl.Map({container:'map',style:{version:8,sources:{'osm-base':{type:'raster',tiles:['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],tileSize:256,maxzoom:19,attribution:'© OpenStreetMap contributors'}},layers:[{id:'osm-base-layer',type:'raster',source:'osm-base'}]},center:[11.778,46.829],zoom:12,pitch:is3d?70:0,bearing:0,attributionControl:true});map.addControl(new maplibregl.NavigationControl({showCompass:true}),'bottom-left');
@@ -179,15 +179,24 @@ function targetZoom(){
 
 function followCar(immediate=false){
  if(!origin||!following)return;
- // Smorza le variazioni di direzione dovute ai segmenti corti del percorso.
- const wrapAngle=d=>((d+540)%360)-180;
- if(immediate||smoothedCarHeading===null)smoothedCarHeading=heading;
- else smoothedCarHeading=(smoothedCarHeading+Math.max(-0.55,Math.min(0.55,wrapAngle(heading-smoothedCarHeading)))+360)%360;
- if(immediate||cameraHeading===null)cameraHeading=smoothedCarHeading;
- else cameraHeading=(cameraHeading+Math.max(-0.32,Math.min(0.32,wrapAngle(smoothedCarHeading-cameraHeading)))+360)%360;
- // Yaw moderato: niente amplificazione che fa sculettare il posteriore.
- window.mabaCarTurn=Math.max(-14,Math.min(14,wrapAngle(smoothedCarHeading-cameraHeading)*0.8));
- const target={center:origin,zoom:targetZoom(),pitch:is3d?67:0,
+  // Orientamento strada e telecamera condividono un unico riferimento.
+  // Filtro basato sul tempo: stessa risposta su PC e smartphone, anche con FPS diversi.
+  const wrapAngle=d=>((d+540)%360)-180;
+  const now=performance.now();
+  const dt=lastFollowTimestamp?Math.min(0.08,Math.max(0.001,(now-lastFollowTimestamp)/1000)):1/60;
+  lastFollowTimestamp=now;
+  if(immediate||smoothedCarHeading===null||cameraHeading===null){
+   smoothedCarHeading=heading;cameraHeading=heading;window.mabaCarTurn=0;
+  }else{
+   // La BMW segue la tangente della strada, senza oscillazioni di singoli segmenti.
+   const carAlpha=1-Math.exp(-dt/0.28);
+   smoothedCarHeading=(smoothedCarHeading+wrapAngle(heading-smoothedCarHeading)*carAlpha+360)%360;
+   // La mappa ruota nella direzione di marcia: piccolo ritardo, non resta a nord.
+   const cameraAlpha=1-Math.exp(-dt/0.42);
+   cameraHeading=(cameraHeading+wrapAngle(smoothedCarHeading-cameraHeading)*cameraAlpha+360)%360;
+   // Scarto contenuto e progressivo: niente sculettamento laterale.
+   window.mabaCarTurn=Math.max(-7,Math.min(7,wrapAngle(smoothedCarHeading-cameraHeading)*0.38));
+  } const target={center:origin,zoom:targetZoom(),pitch:is3d?67:0,
  bearing:cameraHeading,offset:[0,Math.round(map.getContainer().clientHeight*.20)]};
  // Una sola telecamera, senza transizioni easeTo concorrenti.
  map.jumpTo(target);updateCar();positionCarOverlay();
@@ -332,7 +341,7 @@ $('simStart').onclick=async()=>{
   if(map.isStyleLoaded())showRoute(j.routes[0].geometry);
   simProgress=0;simulationActive=true;following=true;navigating=false;
   const point=sampleRoute(0);origin=point.coord;heading=point.angle;
-  cameraHeading=heading;smoothedCarHeading=heading;map.jumpTo({center:origin,zoom:19.0,pitch:67,bearing:heading});
+  cameraHeading=heading;smoothedCarHeading=heading;lastFollowTimestamp=0;map.jumpTo({center:origin,zoom:19.0,pitch:67,bearing:heading});
   updateCar();followCar(true);showSearch(false);
   $('simControls').style.display='flex';$('guidance').classList.add('active');$('trip').classList.add('active');
   msg('Simulazione attiva');simLastTime=performance.now();simAnimation=requestAnimationFrame(simulateFrame);
@@ -350,7 +359,7 @@ import {FBXLoader} from 'three/addons/loaders/FBXLoader.js';
 const holder=document.getElementById('vehicleOverlay');
 const canvas=document.getElementById('bmw3dCanvas');
 if(holder&&canvas){
- const W=296,H=330;
+ const W=252,H=282;
  try{
   const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,premultipliedAlpha:true});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
@@ -358,19 +367,44 @@ if(holder&&canvas){
   renderer.setClearColor(0x000000,0);
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   const scene=new THREE.Scene();
-  scene.add(new THREE.HemisphereLight(0xffffff,0x586374,3.1));
-  const key=new THREE.DirectionalLight(0xffffff,3.5);key.position.set(-4,8,8);scene.add(key);
-  const fill=new THREE.DirectionalLight(0xffffff,1.5);fill.position.set(5,4,-6);scene.add(fill);
+  scene.add(new THREE.HemisphereLight(0xffffff,0x9ba7b8,3.5));
+  const key=new THREE.DirectionalLight(0xffffff,4.0);key.position.set(-4,8,8);scene.add(key);
+  const fill=new THREE.DirectionalLight(0xffffff,2.0);fill.position.set(5,4,-6);scene.add(fill);
   const camera=new THREE.PerspectiveCamera(43,W/H,0.01,1000);
-  const loader=new FBXLoader();loader.setResourcePath('./');
-  loader.load('FINAL_MODEL_16M.fbx',object=>{
+  const loader=new FBXLoader();loader.setResourcePath('./bmw2019/');
+  loader.load('bmw2019/FINAL_MODEL_19.fbx',object=>{
    const box=new THREE.Box3().setFromObject(object), size=new THREE.Vector3(),center=new THREE.Vector3();
    box.getSize(size);box.getCenter(center);
    if(!Number.isFinite(size.length())||size.length()<0.0001)return;
    object.position.sub(center);
+   // Vernice nera metallizzata: mantieni texture di fanali, vetri, gomme e interni.
+   // Scuriamo solo materiali carrozzeria chiaramente blu; i materiali sono clonati
+   // per non alterare le texture condivise del modello.
+   let painted=0;
+   object.traverse(node=>{
+    if(!node.isMesh||!node.material)return;
+    const materials=Array.isArray(node.material)?node.material:[node.material];
+    node.material=materials.map(material=>{
+     if(!material)return material;
+     const m=material.clone();
+     const name=((m.name||'')+' '+(node.name||'')).toLowerCase();
+     if(/light|lamp|rear|tail|glass|window|tire|tyre|wheel|rim|seat|interior|emblem|badge|chrome|metal|grill|plastic|rubber|number|plate|mirror/.test(name))return m;
+     const c=m.color;
+     // Rileva blu scuro (componente blu dominante), tipico della carrozzeria originale.
+     if(c && c.b>c.r*1.18 && c.b>c.g*1.08 && c.b>0.035){
+      c.setRGB(0.105,0.112,0.125);
+      if('metalness' in m)m.metalness=0.72;
+      if('roughness' in m)m.roughness=0.29;
+      painted++;
+     }
+     return m;
+    });
+    if(!Array.isArray(node.material))node.material=node.material[0];
+   });
+   console.info('Maba BMW 2019: materiali carrozzeria adattati',painted);
    const group=new THREE.Group();group.add(object);
    const longest=Math.max(size.x,size.y,size.z);
-   group.scale.setScalar(4.89/longest);
+   group.scale.setScalar(4.55/longest);
    // Vista posteriore leggermente dall'alto; il veicolo ruota con la mappa V15.
    scene.add(group);
    const upAxis=size.y<Math.min(size.x,size.z)*0.8?'y':(size.z<Math.min(size.x,size.y)*0.8?'z':'y');
@@ -384,18 +418,20 @@ if(holder&&canvas){
    camera.updateProjectionMatrix();
    // Nessuna geometria rossa sovrapposta: le barre della V15.5
    // risultavano sospese sul paraurti. Manteniamo le texture originali.
-   let visibleTurn=0;
-    const draw=()=>{
-     if(holder.style.display!=='none'){
-      const targetTurn=THREE.MathUtils.degToRad(window.mabaCarTurn||0);
-      visibleTurn+=THREE.MathUtils.clamp(targetTurn-visibleTurn,-0.012,0.012);
-      group.rotation.y=Math.PI-visibleTurn;
-      renderer.render(scene,camera);
-     }
-     requestAnimationFrame(draw);
-    };
+    let visibleTurn=0, lastDrawTime=0;
+     const draw=(now)=>{
+      const dt=lastDrawTime?Math.min(0.08,(now-lastDrawTime)/1000):1/60;
+      lastDrawTime=now;
+      if(holder.style.display!=='none'){
+       const targetTurn=THREE.MathUtils.degToRad(window.mabaCarTurn||0);
+       visibleTurn+=(targetTurn-visibleTurn)*(1-Math.exp(-dt/0.20));
+       group.rotation.y=Math.PI-visibleTurn;
+       renderer.render(scene,camera);
+      }
+      requestAnimationFrame(draw);
+     };
    holder.classList.add('has-3d');draw();
-   console.info('Maba BMW: FBX 3D caricato, modello originale conservato.');
+   console.info('Maba BMW 2019: modello 3D caricato, nero metallizzato e scala ridotta.');
   },undefined,err=>{console.warn('Maba BMW: fallback immagine V15',err)});
  }catch(e){console.warn('BMW 3D non disponibile, mantengo immagine V15',e)}
 }
