@@ -150,7 +150,7 @@ map.on('style.load',()=>{
  brightenNightMap();msg('Mappa MapTiler caricata. '+(terrainReady?'Rilievi attivati. ':'')+(buildingsReady?'Edifici 3D attivati.':'Edifici 3D non disponibili con questo stile.'));
 });
 map.on('load',()=>{if(mapKey)activateMapStyle();else{applyModeView();msg('Vista 3D pronta. Attivazione GPS…')}});
-let cameraHeading=null,manualZoom=19.0,autoZoomEnabled=true,lastAutoZoom=19.0;
+let cameraHeading=null,smoothedCarHeading=null,manualZoom=19.0,autoZoomEnabled=true,lastAutoZoom=19.0;
 // Angolo relativo fra direzione BMW e telecamera: condiviso col renderer Three.js.
 window.mabaCarTurn=0;
 let lastFollowTimestamp=0;
@@ -179,11 +179,14 @@ function targetZoom(){
 
 function followCar(immediate=false){
  if(!origin||!following)return;
- const delta=((heading-(cameraHeading??heading)+540)%360)-180;
- // In simulazione, il veicolo non deve oscillare ad ogni piccolo segmento OSRM.
- cameraHeading=immediate||cameraHeading===null?heading:(cameraHeading+Math.max(-0.85,Math.min(0.85,delta)) + 360)%360;
- // Rotazione visibile della BMW rispetto alla telecamera, con amplificazione controllata nelle curve.
- window.mabaCarTurn=Math.max(-38,Math.min(38,((heading-cameraHeading+540)%360-180)*2.2));
+ // Smorza le variazioni di direzione dovute ai segmenti corti del percorso.
+ const wrapAngle=d=>((d+540)%360)-180;
+ if(immediate||smoothedCarHeading===null)smoothedCarHeading=heading;
+ else smoothedCarHeading=(smoothedCarHeading+Math.max(-0.55,Math.min(0.55,wrapAngle(heading-smoothedCarHeading)))+360)%360;
+ if(immediate||cameraHeading===null)cameraHeading=smoothedCarHeading;
+ else cameraHeading=(cameraHeading+Math.max(-0.32,Math.min(0.32,wrapAngle(smoothedCarHeading-cameraHeading)))+360)%360;
+ // Yaw moderato: niente amplificazione che fa sculettare il posteriore.
+ window.mabaCarTurn=Math.max(-14,Math.min(14,wrapAngle(smoothedCarHeading-cameraHeading)*0.8));
  const target={center:origin,zoom:targetZoom(),pitch:is3d?67:0,
  bearing:cameraHeading,offset:[0,Math.round(map.getContainer().clientHeight*.20)]};
  // Una sola telecamera, senza transizioni easeTo concorrenti.
@@ -294,7 +297,7 @@ function sampleRoute(distance){
  return {coord,angle:segmentBearing(coord,aim)};
 }
 function stopSimulation(){
- simulationActive=false;cancelAnimationFrame(simAnimation);cameraHeading=null;window.mabaCarTurn=0;lastFollowTimestamp=0;updateCar();
+ simulationActive=false;cancelAnimationFrame(simAnimation);cameraHeading=null;smoothedCarHeading=null;window.mabaCarTurn=0;lastFollowTimestamp=0;updateCar();
  $('simControls').style.display='none';$('simStart').disabled=false;
  navigating=false;showSearch(true);
  $('guidance').classList.remove('active');$('trip').classList.remove('active');
@@ -329,7 +332,7 @@ $('simStart').onclick=async()=>{
   if(map.isStyleLoaded())showRoute(j.routes[0].geometry);
   simProgress=0;simulationActive=true;following=true;navigating=false;
   const point=sampleRoute(0);origin=point.coord;heading=point.angle;
-  cameraHeading=heading;map.jumpTo({center:origin,zoom:19.0,pitch:67,bearing:heading});
+  cameraHeading=heading;smoothedCarHeading=heading;map.jumpTo({center:origin,zoom:19.0,pitch:67,bearing:heading});
   updateCar();followCar(true);showSearch(false);
   $('simControls').style.display='flex';$('guidance').classList.add('active');$('trip').classList.add('active');
   msg('Simulazione attiva');simLastTime=performance.now();simAnimation=requestAnimationFrame(simulateFrame);
@@ -379,28 +382,13 @@ if(holder&&canvas){
    camera.position.set(0,Math.max(2.5,height*1.18),Math.max(5.2,length*1.12));
    camera.lookAt(0,0.15,0);
    camera.updateProjectionMatrix();
-   // Fanali posteriori: superfici rosse luminose, senza proiettare aloni sul terreno.
-   // Si applicano sul piano posteriore del modello, e ruotano insieme alla carrozzeria.
-   const tailMaterial=new THREE.MeshStandardMaterial({color:0xb90918,emissive:0x8b0810,emissiveIntensity:0.65,roughness:0.33,metalness:0.08,side:THREE.DoubleSide,depthTest:true});
-   const rearBox=new THREE.Box3().setFromObject(group);
-   const carWidth=rearBox.max.x-rearBox.min.x;
-   const carHeight=rearBox.max.y-rearBox.min.y;
-   const rearZ=rearBox.max.z+0.015;
-   const rearY=rearBox.min.y+carHeight*0.58;
-   const tailWidth=carWidth*0.21,tailHeight=carHeight*0.075;
-   for(const side of [-1,1]){
-    const lamp=new THREE.Mesh(new THREE.PlaneGeometry(tailWidth,tailHeight),tailMaterial);
-    const worldX=(rearBox.min.x+rearBox.max.x)/2+side*carWidth*0.325;
-    // Convert world-space rear position into local group coordinates at base yaw PI.
-    lamp.position.set(-worldX,rearY,-rearZ);
-    lamp.rotation.y=Math.PI;
-    group.add(lamp);
-   }
+   // Nessuna geometria rossa sovrapposta: le barre della V15.5
+   // risultavano sospese sul paraurti. Manteniamo le texture originali.
    let visibleTurn=0;
     const draw=()=>{
      if(holder.style.display!=='none'){
       const targetTurn=THREE.MathUtils.degToRad(window.mabaCarTurn||0);
-      visibleTurn+=THREE.MathUtils.clamp(targetTurn-visibleTurn,-0.055,0.055);
+      visibleTurn+=THREE.MathUtils.clamp(targetTurn-visibleTurn,-0.012,0.012);
       group.rotation.y=Math.PI-visibleTurn;
       renderer.render(scene,camera);
      }
