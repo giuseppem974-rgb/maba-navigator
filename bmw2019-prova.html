@@ -1,0 +1,414 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Maba Navigator V15.5 · BMW + edifici 3D</title><link href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css" rel="stylesheet"><style>
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,Arial;background:#eef2f6}#map{height:100dvh;width:100%}.panel{position:absolute;z-index:3;top:env(safe-area-inset-top,10px);left:12px;right:12px;background:white;border-radius:17px;padding:12px;box-shadow:0 4px 22px #0003}.brand{font-weight:800;color:#1769cf;margin-bottom:9px}.search{display:flex;gap:7px}input{min-width:0;flex:1;border:1px solid #ddd;border-radius:10px;padding:12px;font-size:16px}button{border:0;border-radius:10px;padding:12px;background:#1769cf;color:white;font-weight:700;cursor:pointer}.actions{position:absolute;z-index:3;right:14px;bottom:calc(25px + env(safe-area-inset-bottom));display:grid;gap:10px}.actions button{border-radius:16px;width:56px;height:52px;font-size:19px;box-shadow:0 3px 12px #0003}.actions .secondary{background:white;color:#1769cf}.status{font-size:13px;color:#333;margin-top:8px}.vehicle-panel{position:absolute;z-index:4;bottom:95px;left:12px;right:82px;max-width:390px;background:#fff;border-radius:18px;padding:14px;box-shadow:0 4px 25px #0004;display:none}.vehicle-panel.open{display:block}.vehicle-title{font-weight:800;margin-bottom:4px}.vehicle-sub{font-size:12px;color:#596574;margin-bottom:12px}.vehicle-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.vehicle-option{background:#f0f4fa;color:#24364a;border:2px solid transparent;border-radius:12px;padding:8px 3px;display:flex;align-items:center;flex-direction:column;gap:4px;font-size:11px}.vehicle-option.active{border-color:#1769cf;background:#e6f0ff}.vehicle-option svg{width:48px;height:55px}.vehicle-close{float:right;background:transparent;color:#667;padding:0 5px;font-size:23px}.car-pin{width:60px;height:70px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 2px 3px #0007)}.car-pin svg{width:60px;height:70px}.maplibregl-ctrl-bottom-left{display:none}
+.guidance{position:absolute;z-index:5;top:125px;left:12px;right:12px;background:#1769cf;color:white;border-radius:14px;padding:12px;display:none;box-shadow:0 4px 18px #0003}.guidance.active{display:block}.guidance strong{font-size:19px}.trip{position:absolute;z-index:4;bottom:22px;left:12px;background:white;padding:12px;border-radius:14px;box-shadow:0 3px 15px #0003;display:none}.trip.active{display:block}.trip button{margin-left:8px}.speed{position:absolute;bottom:90px;left:12px;z-index:4;background:white;padding:9px;border-radius:12px;font-weight:bold} 
+:root{color-scheme:light}body{font-family:system-ui,-apple-system,Arial;background:#e9eef5;color:#172337}.panel{top:calc(10px + env(safe-area-inset-top));left:12px;right:12px;max-width:540px;margin:auto;padding:15px 15px 13px;border:1px solid #ffffffb8;border-radius:22px;box-shadow:0 14px 44px #0b25402e;backdrop-filter:blur(12px)}.brand{font-size:15px;letter-spacing:.3px;color:#112e51;margin-bottom:11px}.route-form{display:flex;gap:8px;align-items:center}.route-fields{flex:1;min-width:0;display:grid;gap:7px}.field{display:flex;align-items:center;gap:10px;background:#f2f5f9;border:1px solid #e4eaf1;border-radius:12px;padding:0 11px}.field input{background:transparent;border:0;padding:12px 0;outline:0;font-size:14px;width:100%}.dot{width:10px;height:10px;border-radius:50%;flex:none}.start-dot{background:#168aef;border:2px solid #b5dfff}.end-dot{background:#ed4b57}.swap{height:48px;width:43px;flex:none;background:#e7eef8;color:#19599c;font-size:25px;padding:0}.plan-button{width:100%;margin-top:9px;padding:13px;background:linear-gradient(125deg,#1164ca,#2697ef);border-radius:12px;font-size:15px}.status{line-height:1.35;color:#536276;margin-top:9px}.actions{right:13px;bottom:calc(102px + env(safe-area-inset-bottom));gap:9px}.actions button{width:51px;height:49px;border-radius:15px;background:#116acb}.actions .secondary{background:#fff;color:#174f8b}.vehicle-panel{bottom:calc(160px + env(safe-area-inset-bottom));right:75px}.car-pin{filter:drop-shadow(0 4px 5px #0008)}.car-pin svg{width:46px;height:61px}#guidance,#trip{border-radius:18px!important;box-shadow:0 7px 25px #0002!important}#trip{bottom:calc(14px + env(safe-area-inset-bottom))!important}
+
+.map-panel{position:absolute;z-index:8;right:72px;bottom:calc(160px + env(safe-area-inset-bottom));width:min(305px,calc(100vw - 92px));background:#fff;border-radius:20px;padding:15px;box-shadow:0 10px 35px #0004;display:none}.map-panel.open{display:grid;gap:9px}.map-panel button{background:#edf3fb;color:#183858;text-align:left;padding:13px;border-radius:12px}.map-panel button.active{background:#1769cf;color:white}.map-panel .close-maps{background:#dfe5ed;text-align:center}.map-hint{font-size:12px;color:#52677c;line-height:1.4}.actions #mode{font-size:12px;font-weight:800}.panel{background:#fdfefeec}.brand{letter-spacing:.7px}
+.key-modal{position:absolute;z-index:20;left:12px;right:12px;top:50%;transform:translateY(-50%);background:#fff;border-radius:20px;padding:18px;box-shadow:0 10px 45px #0006;max-width:520px;margin:auto;display:none}.key-modal.open{display:block}.key-modal h3{margin:0 0 8px}.key-modal p{font-size:13px;color:#52677c;line-height:1.45}.key-modal input{width:100%;margin:8px 0}.key-modal button{width:100%}.key-settings{font-size:12px!important}.map-panel .key-settings{background:#e8eaf3;color:#253d5b}
+body.night #map canvas{filter:none}body.night .panel,body.night .trip,body.night .speed{background:#192637!important;color:#fff!important}
+body.night .status{color:#cbd6e4}.panel.nav-hidden{display:none}.search-reopen{position:absolute;z-index:6;top:calc(12px + env(safe-area-inset-top));left:12px;display:none;padding:10px 13px}.search-reopen.visible{display:block}
+.speed-stack{position:absolute;z-index:5;bottom:calc(92px + env(safe-area-inset-bottom));left:12px;display:grid;gap:7px}.speed-stack .speed{position:static}.limit-sign{border:5px solid #d5232e;border-radius:50%;width:65px;height:65px;background:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#222}.limit-sign.unknown{font-size:11px;text-align:center;border-color:#a8b1be}.cam-notice{position:absolute;z-index:5;top:calc(98px + env(safe-area-inset-top));right:12px;background:#fff7df;color:#533500;border-radius:12px;padding:8px;display:none;max-width:170px;font-weight:700}.cam-notice.visible{display:block}
+.settings-toggle{font-size:13px;display:flex;align-items:center;gap:8px;padding:6px}.settings-toggle input{width:auto;flex:none}
+.car-pin{width:68px!important;height:74px!important;overflow:visible!important;filter:drop-shadow(0 3px 3px #0007)!important}.car-pin img{width:68px;height:74px;object-fit:contain;display:block;transform:none!important}.car-pin.nightcar:before{content:"";position:absolute;top:-22px;left:10px;width:48px;height:45px;background:linear-gradient(to top,#fff3a14d,transparent);filter:blur(8px);pointer-events:none}
+#vehicleOverlay{position:absolute;z-index:4;left:50%;top:75%;transform:translate(-50%,-50%);width:68px;height:74px;pointer-events:none;display:none;filter:drop-shadow(0 3px 4px #0007)}#vehicleOverlay img{width:100%;height:100%;object-fit:contain}#vehicleOverlay{width:148px;height:165px}#bmw3dCanvas{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none}#vehicleOverlay.has-3d #bmw3dCanvas{display:block}#vehicleOverlay.has-3d #bmwFallback{display:none}#vehicleOverlay.nightcar:before{content:"";position:absolute;left:9px;top:-50px;width:50px;height:60px;background:linear-gradient(to top,#fff9c58c 0%,#fff8c447 40%,transparent 100%);filter:blur(9px)}#vehicleOverlay.nightcar:after{content:none}
+.guidance{top:calc(68px + env(safe-area-inset-top))!important;left:12px!important;right:12px!important;padding:9px 12px!important;border-radius:13px!important;max-height:75px;overflow:hidden;background:#102f58!important}.guidance strong{font-size:14px!important;font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.guidance #nextDistance{font-size:18px;font-weight:800;margin-top:1px}body.night .guidance{background:#0b2241!important}
+#zoomControls{position:absolute;z-index:8;right:13px;top:42%;display:grid;gap:8px}#zoomControls button{background:#fff;color:#183858;font-size:26px;width:49px;height:49px;padding:0;box-shadow:0 3px 12px #0004}
+.cam-marker{font-size:23px;background:#fff;border:2px solid #db4141;border-radius:50%;width:35px;height:35px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px #0005}
+</style></head><body><div id="map"></div><div id="vehicleOverlay"><img id="bmwFallback" src="bmw_x5_retro.png" alt="BMW X5 nera"><canvas id="bmw3dCanvas" aria-label="BMW X5 modello tridimensionale"></canvas></div><div class="panel" id="searchPanel"><div class="brand">🚘 Maba Navigator · PROVA BMW 2019</div><div class="route-form"><div class="route-fields"><label class="field"><span class="dot start-dot"></span><input id="start" placeholder="Partenza: posizione GPS" aria-label="Indirizzo di partenza"></label><label class="field"><span class="dot end-dot"></span><input id="destination" placeholder="Dove vuoi andare?" aria-label="Destinazione"></label></div><button id="swap" class="swap" title="Inverti partenza e arrivo" aria-label="Inverti partenza e arrivo">⇅</button></div><button id="simStart" class="plan-button" style="background:#152d45;margin-bottom:5px">▶ Simula Terento → Brunico</button><button id="go" class="plan-button">↗ Calcola percorso</button><div class="status" id="status">Inserisci la destinazione. Lascia vuota la partenza per usare il GPS.</div></div><button id="reopenSearch" class="search-reopen">🔎 Destinazione</button><div class="cam-notice" id="camNotice"></div><div class="map-panel" id="mapPanel"><div class="vehicle-title">Modalità mappa</div><button data-mapmode="road2d">🗺️ Stradale 2D</button><button data-mapmode="road3d">⛰️ Stradale 3D + edifici</button><button data-mapmode="sat3d">🌍 Satellitare 3D + edifici</button><div class="map-hint">Il 3D richiede Internet e dati di elevazione. Edifici dove disponibili.</div><label class="settings-toggle"><input id="autoZoom" type="checkbox" checked> Zoom automatico</label><label class="settings-toggle"><input id="cameraVoice" type="checkbox" checked> Avvisi vocali autovelox</label><label class="settings-toggle"><input id="speedAlarm" type="checkbox"> Avviso sonoro superamento limite</label><label class="settings-toggle">Aspetto <select id="themeSelect"><option value="auto">Automatico</option><option value="day">Giorno</option><option value="night">Notte</option></select></label><button id="mapKey" class="key-settings">🔑 Configura MapTiler</button><button id="closeMaps" class="close-maps">Chiudi</button></div><div class="key-modal" id="keyModal"><h3>🔑 Collega MapTiler</h3><p>Incolla la chiave API creata su MapTiler Cloud. Rimarrà memorizzata soltanto nel browser di questo telefono. La chiave deve autorizzare il dominio Netlify del navigatore.</p><input id="keyInput" placeholder="Incolla la chiave MapTiler" autocomplete="off" spellcheck="false"><button id="saveKey">Attiva mappe 3D</button><p id="keyMessage">Se non inserisci la chiave, rimane disponibile la mappa stradale 2D di emergenza.</p></div><div class="vehicle-panel" id="vehiclePanel"><button class="vehicle-close" id="closeVehicles" aria-label="Chiudi">×</button><div class="vehicle-title">Scegli il tuo veicolo</div><div class="vehicle-sub">BMW X5 xDrive30d 2019 · prova 3D</div><div class="vehicle-grid" id="vehicleGrid"></div></div><div id="guidance" class="guidance"><strong id="instruction">Segui il percorso</strong><div id="nextDistance"></div></div><div class="speed-stack"><div id="limitSign" class="limit-sign unknown">Limite<br>n.d.</div><div class="speed" id="speed">-- km/h</div></div><div class="trip" id="trip"><span id="tripDetails"></span><button id="stopNav">Termina</button></div><div id="simControls" style="display:none;position:absolute;z-index:10;left:12px;right:80px;bottom:calc(16px + env(safe-area-inset-bottom));background:#132b42;color:white;border-radius:15px;padding:10px;align-items:center;gap:9px"><strong>🚗 SIMULAZIONE</strong><select id="simSpeed" style="max-width:100px"><option value="1">1×</option><option value="3" selected>3×</option><option value="8">8×</option></select><button id="simStop" style="background:#c72b38">Stop</button></div><div id="zoomControls"><button id="zoomIn" aria-label="Zoom avanti">+</button><button id="zoomOut" aria-label="Zoom indietro">−</button></div><div class="actions"><button class="secondary" id="mode" title="Scegli modalità mappa" aria-label="Scegli modalità mappa">Mappe</button><button class="secondary" id="vehicles" title="Scegli auto" aria-label="Scegli auto">🚘</button><button id="locate" title="La mia posizione" aria-label="La mia posizione">⌖</button><button class="secondary" id="clear" title="Cancella percorso" aria-label="Cancella percorso">×</button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script>
+const $=id=>document.getElementById(id),status=$('status');function msg(t){status.textContent=t}
+const vehicles={bmw:'BMW X5 M Sport',arrow:'Freccia',city:'Utilitaria',sedan:'Berlina',suv:'SUV',sport:'Sportiva',van:'Furgone'};let selected=localStorage.getItem('mabaVehicleV3')||'bmw';if(!vehicles[selected])selected='bmw';let is3d=localStorage.getItem('maba3d')==='true';let mapMode=localStorage.getItem('mabaDemoMapMode')||'road3d';is3d=mapMode!=='road2d';
+let mapKey=localStorage.getItem('mabaMapTilerKey')||'';let mapStyleType='fallback';let styleSwitching=false;const map=new maplibregl.Map({container:'map',style:{version:8,sources:{'osm-base':{type:'raster',tiles:['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],tileSize:256,maxzoom:19,attribution:'© OpenStreetMap contributors'}},layers:[{id:'osm-base-layer',type:'raster',source:'osm-base'}]},center:[11.778,46.829],zoom:12,pitch:is3d?70:0,bearing:0,attributionControl:true});map.addControl(new maplibregl.NavigationControl({showCompass:true}),'bottom-left');
+function carSvg(type){if(type==='arrow')return '<svg viewBox="0 0 60 70"><path d="M30 5 52 62 30 48 8 62Z" fill="#1976ed" stroke="white" stroke-width="3"/></svg>';
+const bmw=type==='bmw',color=bmw?'#101318':({city:'#e2a135',sedan:'#3478bd',suv:'#566475',sport:'#d83b43',van:'#28a17d'}[type]||'#555');return `<svg viewBox="0 0 60 70" xmlns="http://www.w3.org/2000/svg"><ellipse cx="30" cy="37" rx="21" ry="29" fill="#000" opacity=".22"/><rect x="6" y="18" width="8" height="15" rx="3" fill="#17191d"/><rect x="46" y="18" width="8" height="15" rx="3" fill="#17191d"/><rect x="6" y="43" width="8" height="13" rx="3" fill="#17191d"/><rect x="46" y="43" width="8" height="13" rx="3" fill="#17191d"/><path d="M18 3 Q30 -1 42 3 L48 15 48 55 Q45 67 35 68 L25 68 Q15 67 12 55 L12 15Z" fill="${color}" stroke="#b3b9c3" stroke-width="1.7"/><path d="M15 19Q30 15 45 19L42 30H18Z" fill="#506b7e" stroke="#a7b4bd" stroke-width="1"/><path d="M18 48H42L44 57Q30 62 16 57Z" fill="#465766" stroke="#98a5af" stroke-width="1"/><path d="M16 8h10m8 0h10" stroke="#f7f3e0" stroke-width="3.5" stroke-linecap="round"/><path d="M16 64h9m10 0h9" stroke="#e63939" stroke-width="3" stroke-linecap="round"/>${bmw?'<path d="M17 16 Q30 12 43 16" fill="none" stroke="#d4d9e2" stroke-width="1.4"/><path d="M18 34h24M18 40h24" stroke="#3a414c" stroke-width="1.3"/><path d="M22 5h16" stroke="#a5abb4" stroke-width="2"/><path d="M26 6v7m8-7v7" stroke="#c6cbd2" stroke-width="1.2"/><rect x="25" y="10" width="10" height="4" rx="1" fill="#d4d7dc"/><path d="M14 60q16 8 32 0" fill="none" stroke="#616873" stroke-width="2"/>':''}</svg>`}
+let simulationActive=false,simAnimation=0,simProgress=0,simLastTime=0,simRouteLength=0,simSegments=[];let origin=null,manualStart=null,destination=null,me=null,destMarker=null,heading=0,watchId=null,following=true,routeCoords=[],routeSteps=[],routeDistance=0,navigating=false,lastReroute=0,lastAnnounced="",routingBusy=false;const grid=$('vehicleGrid');function renderVehicles(){grid.innerHTML=Object.entries(vehicles).map(([id,name])=>`<button class="vehicle-option ${selected===id?'active':''}" data-vehicle="${id}" aria-pressed="${selected===id}">${carSvg(id)}<span>${name}</span></button>`).join('')}
+let nightActive=false,braking=false,previousSpeed=null,lastAlarm=0,knownLimit=null,lastCamQuery=0,cameras=[],lastCameraWarning="";
+function sunTimesNight(lat,lon,date=new Date()){
+ const dayStart=Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate());
+ const n=Math.floor((dayStart-Date.UTC(date.getUTCFullYear(),0,0))/86400000);
+ const gamma=2*Math.PI/365*(n-1);
+ const decl=.006918-.399912*Math.cos(gamma)+.070257*Math.sin(gamma)-.006758*Math.cos(2*gamma)+.000907*Math.sin(2*gamma);
+ const eq=229.18*(.000075+.001868*Math.cos(gamma)-.032077*Math.sin(gamma)-.014615*Math.cos(2*gamma));
+ const zenith=Math.PI/2+0.01454, phi=lat*Math.PI/180;
+ const x=(Math.cos(zenith)-Math.sin(phi)*Math.sin(decl))/(Math.cos(phi)*Math.cos(decl));
+ if(x>1)return true;if(x< -1)return false;
+ const half=Math.acos(x)*180/Math.PI*4, noon=720-4*lon-eq;
+ const minutes=(date.getTime()-dayStart)/60000;
+ return minutes<noon-half||minutes>noon+half;
+}
+function refreshTheme(){
+ const mode=$('themeSelect').value, newNight=mode==='night'||(mode==='auto'&&origin&&sunTimesNight(origin[1],origin[0]));
+ if(!!newNight!==nightActive){nightActive=!!newNight;document.body.classList.toggle('night',nightActive);if(mapKey&&mapMode!=='sat3d')activateMapStyle();updateCar();}
+}
+function rearBmwSvg(){return `<svg viewBox="0 0 84 108" xmlns="http://www.w3.org/2000/svg" aria-label="BMW X5 nera vista da dietro"><defs><linearGradient id="bodyRear" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#535a64"/><stop offset=".42" stop-color="#121820"/><stop offset="1" stop-color="#020407"/></linearGradient><linearGradient id="rearGlass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4c7186"/><stop offset="1" stop-color="#111e2b"/></linearGradient></defs><ellipse cx="42" cy="98" rx="36" ry="8" fill="#000" opacity=".3"/>${nightActive?`<path d="M23 22L-15 -38L22 -9L42 17L62 -9L99 -38L61 22Z" fill="#fff8cb" opacity=".20"/><ellipse cx="42" cy="10" rx="30" ry="18" fill="#fff4b1" opacity=".12"/>`:``}<path d="M14 28Q15 16 28 11L56 11Q69 16 70 28L76 81Q74 94 63 96H21Q10 94 8 81Z" fill="url(#bodyRear)" stroke="#a5abb1" stroke-width="1.8"/><path d="M22 23Q42 17 62 23L67 52H17Z" fill="url(#rearGlass)" stroke="#8b9ba9" stroke-width="1.5"/><path d="M19 55H65L72 78Q42 86 12 78Z" fill="#111821" stroke="#737c86" stroke-width="1"/><path d="M14 61H30L26 69H12Z M54 61H70L72 69H58Z" fill="${nightActive?(braking?'#ff2736':'#f0444d'):'#9b2028'}" stroke="#ffd2c9" stroke-width="1.5"/><path d="M30 82H54V91H30Z" fill="#d4d9dd"/><path d="M32 84H52V89H32Z" fill="#313a46"/><circle cx="42" cy="57" r="5" fill="#f2f2f2" stroke="#90969d"/><path d="M42 52V62M37 57H47" stroke="#2575be" stroke-width="1.5"/><path d="M18 92H27M57 92H66" stroke="#adb4bc" stroke-width="3" stroke-linecap="round"/></svg>`}
+function positionCarOverlay(){
+ if(!origin||!following||selected!=='bmw')return;
+ // Proietta le coordinate reali dell'auto: evita che la BMW appaia sopra gli edifici.
+ const p=map.project(origin),el=$('vehicleOverlay');
+ if(!Number.isFinite(p.x)||!Number.isFinite(p.y))return;
+ el.style.left=p.x+'px';el.style.top=p.y+'px';
+}
+map.on('render',()=>{if(following&&selected==='bmw')positionCarOverlay()});
+function updateCar(){
+ if(!origin)return;
+ if(!me||me._mabaType!==selected){
+  if(me)me.remove();
+  const el=document.createElement('div');el.className='car-pin';
+  if(selected==='bmw'){const pic=document.createElement('img');pic.src='bmw_x5_retro.png';pic.alt='BMW X5 F15 M Sport nera';el.appendChild(pic)}
+  else el.innerHTML=carSvg(selected);
+  me=new maplibregl.Marker({element:el,rotationAlignment:'viewport',pitchAlignment:'viewport',rotation:0}).setLngLat(origin).addTo(map);
+  me._mabaType=selected;
+ }
+ me.getElement().classList.toggle('nightcar',nightActive);
+ me.setLngLat(origin);
+ const overlay=$('vehicleOverlay');
+ const fixed=following&&selected==='bmw';
+ overlay.style.display=fixed?'block':'none';
+ overlay.classList.toggle('nightcar',nightActive);
+ me.getElement().style.visibility=fixed?'hidden':'visible';
+ if(fixed)positionCarOverlay();
+}
+grid.onclick=e=>{const b=e.target.closest('[data-vehicle]');if(!b)return;selected=b.dataset.vehicle;localStorage.setItem('mabaVehicleV3',selected);renderVehicles();updateCar();$('vehiclePanel').classList.remove('open');msg('Veicolo selezionato: '+vehicles[selected])};$('vehicles').onclick=()=>{$('vehiclePanel').classList.toggle('open');renderVehicles()};$('closeVehicles').onclick=()=>$('vehiclePanel').classList.remove('open');
+let terrainReady=false,buildingsReady=false;
+function maptilerStyle(mode){
+ const name=mode==='sat3d'?'hybrid':nightActive?'streets-v2-dark':'streets-v2';
+ return `https://api.maptiler.com/maps/${name}/style.json?key=${encodeURIComponent(mapKey)}`;
+}
+function activateMapStyle(){
+ if(!mapKey){$('keyModal').classList.add('open');msg('Inserisci la chiave MapTiler per le mappe 3D.');return}
+ const wanted=mapMode==='sat3d'?'sat3d':(nightActive?'road-night':'road');
+ if(mapStyleType===wanted&&!styleSwitching){install3D();applyModeView();return}
+ styleSwitching=true;terrainReady=false;buildingsReady=false;
+ msg('Caricamento mappa MapTiler…');
+ try{map.setStyle(maptilerStyle(mapMode));mapStyleType=wanted}catch(e){styleSwitching=false;msg('Errore caricamento MapTiler: '+e.message)}
+}
+function brightenNightMap(){
+ if(!nightActive)return;
+ const layers=map.getStyle()?.layers||[];
+ for(const layer of layers){
+  try{
+   const id=layer.id.toLowerCase();
+   if(layer.type==='background')map.setPaintProperty(layer.id,'background-color','#172d4b');
+   else if(layer.type==='fill' && /(landcover|landuse|park|residential|urban)/.test(id)){
+    map.setPaintProperty(layer.id,'fill-color','#263f60');
+   }else if(layer.type==='line' && /(road|street|highway|transportation)/.test(id)){
+    // La luminosità delle strade resta quella dello stile originale.
+    map.setPaintProperty(layer.id,'line-opacity',0.96);
+   }
+  }catch(e){}
+ }
+}
+function install3D(){
+ if(!mapKey)return;
+ try{
+  if(!map.getSource('maba-dem'))map.addSource('maba-dem',{
+   type:'raster-dem',url:`https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${encodeURIComponent(mapKey)}`,tileSize:256,encoding:'mapbox'});
+  terrainReady=true;
+ }catch(e){console.warn('Rilievi:',e)}
+ // Sorgente dedicata agli edifici: non dipende dai nomi delle sorgenti dello stile.
+ try{
+  if(!map.getSource('maba-buildings-source'))map.addSource('maba-buildings-source',{
+   type:'vector',url:`https://api.maptiler.com/tiles/v3/tiles.json?key=${encodeURIComponent(mapKey)}`});
+  if(!map.getLayer('maba-buildings')){
+   const layers=map.getStyle()?.layers||[];
+   const firstLabel=layers.find(l=>l.type==='symbol' && l.layout?.['text-field']);
+   const layer={id:'maba-buildings',type:'fill-extrusion',source:'maba-buildings-source',
+    'source-layer':'building',minzoom:13,
+    layout:{visibility:mapMode==='road2d'?'none':'visible'},
+    paint:{'fill-extrusion-color':nightActive?'#607a9c':'#c7c5bf',
+     'fill-extrusion-height':['interpolate',['linear'],['zoom'],13,0,14,['max',3,['coalesce',['to-number',['get','render_height']],['to-number',['get','height']],9]]],
+     'fill-extrusion-base':['coalesce',['to-number',['get','render_min_height']],['to-number',['get','min_height']],0],
+     'fill-extrusion-opacity':0.94}};
+   map.addLayer(layer,firstLabel?.id);
+  }
+  buildingsReady=!!map.getLayer('maba-buildings');
+ }catch(e){buildingsReady=false;console.warn('Edifici 3D:',e);msg('Edifici 3D non caricati: '+e.message)}
+}
+function applyModeView(){
+ const threeD=mapMode!=='road2d';is3d=threeD;
+ if(terrainReady){try{map.setTerrain(threeD?{source:'maba-dem',exaggeration:1.25}:null)}catch(e){console.warn('Terreno:',e)}}
+ if(map.getLayer('maba-buildings'))map.setLayoutProperty('maba-buildings','visibility',threeD?'visible':'none');
+ map.easeTo({pitch:threeD?66:0,duration:850});
+ $('mode').textContent=mapMode==='road2d'?'2D':mapMode==='road3d'?'3D':'SAT';
+ document.querySelectorAll('[data-mapmode]').forEach(b=>b.classList.toggle('active',b.dataset.mapmode===mapMode));
+ localStorage.setItem('mabaDemoMapMode',mapMode);
+}
+function applyMode(){
+ if(!mapKey){applyModeView();msg('Vista 3D di prova attiva · senza rilievi MapTiler');return}
+ const wanted=mapMode==='sat3d'?'sat3d':(nightActive?'road-night':'road');
+ if(mapStyleType!==wanted){activateMapStyle();return}
+ applyModeView();
+}
+$('mode').onclick=()=>{$('mapPanel').classList.toggle('open')};
+$('closeMaps').onclick=()=>$('mapPanel').classList.remove('open');
+$('mapKey').onclick=()=>{$('mapPanel').classList.remove('open');$('keyModal').classList.add('open');$('keyInput').value=mapKey};
+$('saveKey').onclick=()=>{let v=$('keyInput').value.trim();if(!v){$('keyMessage').textContent='Inserisci la chiave API MapTiler.';return}mapKey=v;localStorage.setItem('mabaMapTilerKey',v);$('keyModal').classList.remove('open');mapStyleType='fallback';activateMapStyle()};
+$('mapPanel').onclick=e=>{const b=e.target.closest('[data-mapmode]');if(!b)return;mapMode=b.dataset.mapmode;applyMode();$('mapPanel').classList.remove('open')};
+map.on('style.load',()=>{
+ if(!mapKey)return;
+ styleSwitching=false;install3D();applyModeView();
+ if(routeCoords.length>1){try{showRoute({type:'LineString',coordinates:routeCoords})}catch(e){console.warn('Percorso:',e)}}
+ brightenNightMap();msg('Mappa MapTiler caricata. '+(terrainReady?'Rilievi attivati. ':'')+(buildingsReady?'Edifici 3D attivati.':'Edifici 3D non disponibili con questo stile.'));
+});
+map.on('load',()=>{if(mapKey)activateMapStyle();else{applyModeView();msg('Vista 3D pronta. Attivazione GPS…')}});
+let cameraHeading=null,smoothedCarHeading=null,manualZoom=19.0,autoZoomEnabled=true,lastAutoZoom=19.0;
+// Angolo relativo fra direzione BMW e telecamera: condiviso col renderer Three.js.
+window.mabaCarTurn=0;
+let lastFollowTimestamp=0;
+$('autoZoom').checked=localStorage.getItem('mabaAutoZoom')!=='false';
+$('cameraVoice').checked=localStorage.getItem('mabaCameraVoice')!=='false';
+autoZoomEnabled=$('autoZoom').checked;
+$('autoZoom').onchange=()=>{autoZoomEnabled=$('autoZoom').checked;localStorage.setItem('mabaAutoZoom',autoZoomEnabled?'true':'false');manualZoom=map.getZoom()};
+$('cameraVoice').onchange=()=>localStorage.setItem('mabaCameraVoice',$('cameraVoice').checked?'true':'false');
+function adjustZoom(delta){autoZoomEnabled=false;$('autoZoom').checked=false;localStorage.setItem('mabaAutoZoom','false');manualZoom=Math.min(20,Math.max(12,map.getZoom()+delta));if(following&&origin){followCar(true)}else{map.setZoom(manualZoom);positionCarOverlay()}}
+$('zoomIn').onclick=()=>adjustZoom(0.8);
+$('zoomOut').onclick=()=>adjustZoom(-0.8);
+function targetZoom(){
+ if(!autoZoomEnabled)return manualZoom;
+ let desired=19.0;
+ if(simulationActive||navigating){
+  const progress=simulationActive?simProgress:(origin&&routeCoords.length?nearestOnRoute(origin).progress:0);
+  const next=routeSteps.find(st=>st.progress>progress+5);
+  if(next){const d=next.progress-progress;if(d<130)desired=19.3;else if(d<350)desired=19.1;else if(d>1400)desired=18.5}
+ }
+ // Evita di richiedere un nuovo livello di zoom a ogni fotogramma:
+ // le tessere raster OSM risultano altrimenti sfocate durante il movimento.
+ if(simulationActive&&mapStyleType==='fallback')desired=19.0;
+ lastAutoZoom+=Math.max(-0.008,Math.min(0.008,desired-lastAutoZoom));
+ return lastAutoZoom;
+}
+
+function followCar(immediate=false){
+ if(!origin||!following)return;
+  // Orientamento strada e telecamera condividono un unico riferimento.
+  // Filtro basato sul tempo: stessa risposta su PC e smartphone, anche con FPS diversi.
+  const wrapAngle=d=>((d+540)%360)-180;
+  const now=performance.now();
+  const dt=lastFollowTimestamp?Math.min(0.08,Math.max(0.001,(now-lastFollowTimestamp)/1000)):1/60;
+  lastFollowTimestamp=now;
+  if(immediate||smoothedCarHeading===null||cameraHeading===null){
+   smoothedCarHeading=heading;cameraHeading=heading;window.mabaCarTurn=0;
+  }else{
+   // La BMW segue la tangente della strada, senza oscillazioni di singoli segmenti.
+   const carAlpha=1-Math.exp(-dt/0.28);
+   smoothedCarHeading=(smoothedCarHeading+wrapAngle(heading-smoothedCarHeading)*carAlpha+360)%360;
+   // La mappa ruota nella direzione di marcia: piccolo ritardo, non resta a nord.
+   const cameraAlpha=1-Math.exp(-dt/0.42);
+   cameraHeading=(cameraHeading+wrapAngle(smoothedCarHeading-cameraHeading)*cameraAlpha+360)%360;
+   // Scarto contenuto e progressivo: niente sculettamento laterale.
+   window.mabaCarTurn=Math.max(-7,Math.min(7,wrapAngle(smoothedCarHeading-cameraHeading)*0.38));
+  } const target={center:origin,zoom:targetZoom(),pitch:is3d?67:0,
+ bearing:cameraHeading,offset:[0,Math.round(map.getContainer().clientHeight*.20)]};
+ // Una sola telecamera, senza transizioni easeTo concorrenti.
+ map.jumpTo(target);updateCar();positionCarOverlay();
+}
+$('themeSelect').value=localStorage.getItem('mabaTheme')||'auto';
+$('speedAlarm').checked=localStorage.getItem('mabaSpeedAlarm')==='true';
+$('themeSelect').onchange=()=>{localStorage.setItem('mabaTheme',$('themeSelect').value);refreshTheme()};
+$('speedAlarm').onchange=()=>localStorage.setItem('mabaSpeedAlarm',$('speedAlarm').checked);
+$('reopenSearch').onclick=()=>{$('searchPanel').classList.remove('nav-hidden');$('reopenSearch').classList.remove('visible')};
+function showSearch(show){$('searchPanel').classList.toggle('nav-hidden',!show);$('reopenSearch').classList.toggle('visible',!show)}
+// maxspeed OSM sperimentale; mai dedurre limiti mancanti.
+let speedOverPreviously=false;let speedWays=[],lastSpeedFetch=0,speedFetchPos=null,speedFetching=false,gpsKmh=null;
+function segmentDistanceMeters(p,a,b){const c=Math.cos(p[1]*Math.PI/180),x=(p[0]-a[0])*c,y=p[1]-a[1],dx=(b[0]-a[0])*c,dy=b[1]-a[1];const t=Math.max(0,Math.min(1,(x*dx+y*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-t*dx,y-t*dy)*111195}
+function maxspeedValue(v){const m=String(v||'').match(/^(\d+(?:\.\d+)?)\s*(mph|km\/h|kmh)?$/i);if(!m)return null;const n=Math.round(Number(m[1])*(m[2]?.toLowerCase()==='mph'?1.609344:1));return n>0&&n<=140?n:null}
+function showSpeedLimit(){let nearest=null;if(origin)for(const w of speedWays)for(let i=1;i<w.line.length;i++){const d=segmentDistanceMeters(origin,w.line[i-1],w.line[i]);if(d<30&&(!nearest||d<nearest.d))nearest={d,limit:w.limit}}knownLimit=nearest?.limit??null;const sign=$('limitSign');sign.classList.toggle('unknown',knownLimit===null);sign.textContent=knownLimit===null?'Limite n.d.':String(knownLimit);const v=simulationActive?45:gpsKmh;const over=knownLimit!==null&&v!==null&&v>knownLimit;
+ $('speed').style.color=over?'#e52c39':'';
+ if(over&&!speedOverPreviously&&$('speedAlarm').checked)speak('Attenzione, limite di velocità superato');
+ speedOverPreviously=over}
+async function loadSpeedLimits(){if(!origin||speedFetching)return;if(Date.now()-lastSpeedFetch<60000&&speedFetchPos&&meters(origin,speedFetchPos)<350){showSpeedLimit();return}lastSpeedFetch=Date.now();speedFetchPos=[...origin];speedFetching=true;const [lon,lat]=origin;try{const query=`[out:json][timeout:15];way(around:600,${lat},${lon})["highway"]["maxspeed"];out geom;`;const res=await fetch('https://overpass.kumi.systems/api/interpreter?data='+encodeURIComponent(query));if(!res.ok)throw Error('OSM');const j=await res.json();speedWays=(j.elements||[]).map(w=>({limit:maxspeedValue(w.tags?.maxspeed),line:(w.geometry||[]).map(p=>[p.lon,p.lat])})).filter(w=>w.limit&&w.line.length>1)}catch(e){console.warn('Limiti OSM non disponibili',e);speedWays=[]}finally{speedFetching=false;showSpeedLimit()}}
+// Dati sperimentali OSM: nessun limite o autovelox viene inventato.
+let cameraMarkers=[];async function updateRoadData(){
+ if(!origin||Date.now()-lastCamQuery<120000)return;
+ lastCamQuery=Date.now();
+ const [lon,lat]=origin;
+ try{
+  const q=`[out:json][timeout:12];(node(around:1800,${lat},${lon})["highway"="speed_camera"];);out center;`;
+  const res=await fetch('https://overpass.kumi.systems/api/interpreter?data='+encodeURIComponent(q));
+  if(!res.ok)return;
+  const json=await res.json();
+  cameras=(json.elements||[]).filter(e=>Number.isFinite(e.lat)&&Number.isFinite(e.lon)).map(e=>[e.lon,e.lat]);
+  for(const m of cameraMarkers)m.remove();cameraMarkers=[];
+  for(const c of cameras){
+   const el=document.createElement('div');el.className='cam-marker';el.textContent='📷';
+   cameraMarkers.push(new maplibregl.Marker({element:el}).setLngLat(c).addTo(map));
+  }
+ }catch(e){console.warn('Autovelox OSM non disponibili',e)}
+}
+function checkCamera(){
+ $('camNotice').classList.remove('visible');
+ if(!origin)return;
+ let nearest=null;
+ for(const c of cameras){const d=meters(origin,c);if(d<650&&(!nearest||d<nearest.d))nearest={c,d};}
+ if(nearest){
+  $('camNotice').textContent='📷 Possibile autovelox vicino · '+Math.round(nearest.d/50)*50+' m';
+  $('camNotice').classList.add('visible');
+  const id=nearest.c.join(',');
+  if(nearest.d<550&&nearest.d>80&&lastCameraWarning!==id&&$('cameraVoice').checked){lastCameraWarning=id;speak('Attenzione, possibile autovelox nelle vicinanze');}
+ }
+}
+function gps(){
+ if(!window.isSecureContext){msg('Per attivare il GPS apri Maba Navigator da un sito HTTPS.');return}
+ if(!navigator.geolocation){msg('GPS non disponibile.');return}
+ if(watchId!==null){following=true;if(origin)followCar(true);msg('Seguimento GPS riattivato.');return}
+ msg('Attendo il segnale GPS…');
+ watchId=navigator.geolocation.watchPosition(p=>{if(simulationActive)return;
+  const previous=origin;origin=[p.coords.longitude,p.coords.latitude];
+  if(Number.isFinite(p.coords.heading)&&p.coords.speed>0.8)heading=p.coords.heading;
+  else if(previous&&p.coords.speed>1.5){const dx=(origin[0]-previous[0])*Math.cos(origin[1]*Math.PI/180),dy=origin[1]-previous[1];if(Math.hypot(dx,dy)>0.00002)heading=(Math.atan2(dx,dy)*180/Math.PI+360)%360}
+  const sp=p.coords.speed;gpsKmh=sp==null?null:Math.round(sp*3.6);
+  braking=sp!=null&&previousSpeed!=null&&previousSpeed-sp>1.6;
+  if(sp!=null)previousSpeed=sp;
+  refreshTheme();updateCar();updateRoadData();loadSpeedLimits();checkCamera();
+  $('speed').textContent=(p.coords.speed==null?'--':Math.round(Math.max(0,p.coords.speed)*3.6))+' km/h';if(navigating)updateNavigation();if(following)followCar();
+  msg('GPS attivo · '+(p.coords.speed!=null?Math.round(Math.max(0,p.coords.speed)*3.6)+' km/h · ':'')+'precisione ±'+Math.round(p.coords.accuracy)+' m');
+ },e=>msg('Errore GPS: '+e.message+' · verifica autorizzazioni e HTTPS.'),{enableHighAccuracy:true,maximumAge:1000,timeout:20000});
+}
+$('locate').onclick=gps;
+map.on('dragstart',e=>{if(e.originalEvent)following=false});
+map.on('rotatestart',e=>{if(e.originalEvent)following=false});
+map.on('error',e=>{console.warn('Mappa:',e.error);if(mapKey&&e.error)msg('Errore mappa: controlla la chiave MapTiler e il dominio autorizzato. Apri Mappe → Configura MapTiler.');else if(!map.loaded())msg('Errore caricamento mappa: controlla Internet.')});
+function clearRoute(){if(map.getLayer('route-line'))map.removeLayer('route-line');if(map.getSource('route'))map.removeSource('route')}
+function showRoute(geometry){clearRoute();map.addSource('route',{type:'geojson',data:{type:'Feature',geometry,properties:{}}});map.addLayer({id:'route-line',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#1675ef','line-width':7,'line-opacity':.9}})}
+function meters(a,b){let rad=Math.PI/180,dlat=(b[1]-a[1])*rad,dlon=(b[0]-a[0])*rad;let h=Math.sin(dlat/2)**2+Math.cos(a[1]*rad)*Math.cos(b[1]*rad)*Math.sin(dlon/2)**2;return 12742000*Math.asin(Math.min(1,Math.sqrt(h)))}
+function nearestOnRoute(p){let best={distance:Infinity,index:0,progress:0},acc=0;for(let i=1;i<routeCoords.length;i++){let a=routeCoords[i-1],b=routeCoords[i],scale=Math.cos(p[1]*Math.PI/180),dx=(b[0]-a[0])*scale,dy=b[1]-a[1],t=Math.max(0,Math.min(1,((p[0]-a[0])*scale*dx+(p[1]-a[1])*dy)/(dx*dx+dy*dy||1)));let q=[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t],d=meters(p,q),seg=meters(a,b);if(d<best.distance)best={distance:d,index:i,progress:acc+seg*t};acc+=seg}return best}
+function speak(t){if(!('speechSynthesis' in window))return;try{speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='it-IT';u.rate=.95;speechSynthesis.speak(u)}catch(e){}}
+function instructionText(step){let m=step.maneuver||{},name=step.name?' su '+step.name:'';let mod=m.modifier||'',type=m.type||'';if(type==='arrive')return 'Sei arrivato a destinazione';if(type==='depart')return 'Parti'+name;if(type==='roundabout'||type==='rotary')return 'Entra nella rotatoria'+name;if(mod.includes('left'))return 'Svolta a sinistra'+name;if(mod.includes('right'))return 'Svolta a destra'+name;if(mod==='uturn')return 'Fai inversione';return 'Prosegui'+name}
+function updateNavigation(){if(!navigating||!origin||!routeCoords.length)return;let n=nearestOnRoute(origin);let remaining=Math.max(0,routeDistance-n.progress);$('tripDetails').textContent=(remaining/1000).toFixed(1)+' km rimanenti';let upcoming=routeSteps.find(st=>st.progress>n.progress+4)||routeSteps[routeSteps.length-1];if(upcoming){let d=Math.max(0,upcoming.progress-n.progress),t=instructionText(upcoming.step);$('instruction').textContent=t;$('nextDistance').textContent=d>=1000?(d/1000).toFixed(1)+' km':Math.round(d/10)*10+' m';let threshold=d<35?'ora':d<170?'vicino':d<550?'preavviso':null,key=routeSteps.indexOf(upcoming)+'-'+threshold;if(threshold&&lastAnnounced!==key){lastAnnounced=key;speak((threshold==='ora'?'Ora, ':threshold==='vicino'?'Tra '+Math.round(d/10)*10+' metri, ':'Tra circa '+Math.round(d/50)*50+' metri, ')+t)}}if(remaining<35){speak('Sei arrivato a destinazione');stopNavigation();msg('Destinazione raggiunta.');return}if(n.distance>85&&Date.now()-lastReroute>20000&&!routingBusy){lastReroute=Date.now();msg('Fuori percorso: ricalcolo…');calculateRoute(true)}}
+function stopNavigation(){if(simulationActive)stopSimulation();showSearch(true);navigating=false;routeSteps=[];routeCoords=[];$('guidance').classList.remove('active');$('trip').classList.remove('active');clearRoute()}
+$('stopNav').onclick=()=>{stopNavigation();msg('Navigazione terminata.')};
+async function calculateRoute(reroute=false){if(!(manualStart||origin)||!destination||routingBusy)return;routingBusy=true;try{let routeStart=manualStart||origin;let u=`https://router.project-osrm.org/route/v1/driving/${routeStart.join(',')};${destination.join(',')}?overview=full&geometries=geojson&steps=true`;let response=await fetch(u),result=await response.json();if(!response.ok||result.code!=='Ok'||!result.routes?.length)throw Error('Percorso non disponibile');let r=result.routes[0];routeCoords=r.geometry.coordinates;routeDistance=r.distance;routeSteps=[];let traveled=0;for(let leg of r.legs){for(let step of leg.steps){let p=step.maneuver.location,nearest=nearestProgress(routeCoords,p);routeSteps.push({step,progress:nearest})}}routeSteps.sort((a,b)=>a.progress-b.progress);showRoute(r.geometry);navigating=!manualStart;if(navigating)showSearch(false);lastAnnounced='';$('guidance').classList.toggle('active',!manualStart);$('trip').classList.add('active');if(!reroute){let bounds=new maplibregl.LngLatBounds(routeStart,routeStart);routeCoords.forEach(c=>bounds.extend(c));map.fitBounds(bounds,{padding:{top:170,bottom:120,left:40,right:70},maxZoom:16});if(!manualStart&&origin){following=true;setTimeout(()=>followCar(true),1100)}}else following=true;if(!manualStart)updateNavigation();else $('tripDetails').textContent=(r.distance/1000).toFixed(1)+' km · '+Math.round(r.duration/60)+' min';msg((manualStart?'Percorso pianificato':'Navigazione attiva')+' · '+(r.distance/1000).toFixed(1)+' km · circa '+Math.round(r.duration/60)+' min, senza traffico.')}catch(e){msg('Errore percorso: '+e.message)}finally{routingBusy=false}}
+function nearestProgress(coords,p){let acc=0,best=Infinity,progress=0;for(let i=1;i<coords.length;i++){let a=coords[i-1],b=coords[i],scale=Math.cos(p[1]*Math.PI/180),dx=(b[0]-a[0])*scale,dy=b[1]-a[1],t=Math.max(0,Math.min(1,((p[0]-a[0])*scale*dx+(p[1]-a[1])*dy)/(dx*dx+dy*dy||1))),q=[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t],d=meters(p,q),len=meters(a,b);if(d<best){best=d;progress=acc+len*t}acc+=len}return progress}
+$('go').onclick=async()=>{let q=$('destination').value.trim();if(!q){msg('Scrivi una destinazione.');return}msg('Cerco '+q+'…');try{let r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q));if(!r.ok)throw Error('Ricerca non disponibile');let data=await r.json();if(!data.length)throw Error('Destinazione non trovata');destination=[+data[0].lon,+data[0].lat];if(destMarker)destMarker.remove();destMarker=new maplibregl.Marker({color:'#e34b48'}).setLngLat(destination).addTo(map);let typed=$('start').value.trim();manualStart=null;if(typed){let sr=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(typed));if(!sr.ok)throw Error('Ricerca partenza non disponibile');let starts=await sr.json();if(!starts.length)throw Error('Partenza non trovata');manualStart=[+starts[0].lon,+starts[0].lat]}if(!manualStart&&!origin){map.flyTo({center:destination,zoom:14});msg('Destinazione trovata. Attiva il GPS oppure inserisci una partenza.');return}await calculateRoute()}catch(e){msg('Errore: '+e.message)}};
+$('swap').onclick=()=>{let a=$('start').value,b=$('destination').value;$('start').value=b;$('destination').value=a;msg('Partenza e destinazione invertite. Premi Calcola percorso.')};$('start').addEventListener('keydown',e=>{if(e.key==='Enter')$('go').click()});$('destination').addEventListener('keydown',e=>{if(e.key==='Enter')$('go').click()});
+// Simulazione: percorre una geometria stradale reale restituita da OSRM.
+const SIM_START=[11.7779,46.8291], SIM_END=[11.9369,46.7969];
+function segmentBearing(a,b){return (Math.atan2((b[0]-a[0])*Math.cos(a[1]*Math.PI/180),b[1]-a[1])*180/Math.PI+360)%360}
+function prepareSimSegments(){
+ simSegments=[];let total=0;
+ for(let i=1;i<routeCoords.length;i++){
+  const a=routeCoords[i-1],b=routeCoords[i],length=meters(a,b);
+  if(length<0.15)continue;
+  simSegments.push({a,b,start:total,end:total+length,angle:segmentBearing(a,b)});
+  total+=length;
+ }
+ simRouteLength=total;
+}
+function sampleRoute(distance){
+ if(!simSegments.length)return {coord:SIM_START,angle:0};
+ let lo=0,hi=simSegments.length-1;
+ while(lo<hi){const mid=(lo+hi)>>1;if(simSegments[mid].end<distance)lo=mid+1;else hi=mid}
+ const seg=simSegments[lo],t=Math.max(0,Math.min(1,(distance-seg.start)/(seg.end-seg.start)));
+ const coord=[seg.a[0]+(seg.b[0]-seg.a[0])*t,seg.a[1]+(seg.b[1]-seg.a[1])*t];
+ // Guardiamo un punto 14 m più avanti per evitare rotazioni brusche.
+ let ahead=lo;
+ while(ahead<simSegments.length-1&&simSegments[ahead].end<distance+14)ahead++;
+ const aim=simSegments[ahead].b;
+ return {coord,angle:segmentBearing(coord,aim)};
+}
+function stopSimulation(){
+ simulationActive=false;cancelAnimationFrame(simAnimation);cameraHeading=null;smoothedCarHeading=null;window.mabaCarTurn=0;lastFollowTimestamp=0;updateCar();
+ $('simControls').style.display='none';$('simStart').disabled=false;
+ navigating=false;showSearch(true);
+ $('guidance').classList.remove('active');$('trip').classList.remove('active');
+ msg('Simulazione terminata. Premi ⌖ per tornare alla posizione GPS.');
+}
+function simulateFrame(now){
+ if(!simulationActive)return;
+ const dt=Math.min(.12,(now-simLastTime)/1000||0);simLastTime=now;
+ const multiplier=Number($('simSpeed').value)||1;
+ simProgress+=dt*(45/3.6)*multiplier;
+ if(simProgress>=simRouteLength){stopSimulation();return}
+ const point=sampleRoute(simProgress);origin=point.coord;heading=point.angle;
+ braking=false;updateCar();followCar();loadSpeedLimits();checkCamera();showSpeedLimit();
+ $('speed').textContent='45 km/h · SIM';
+ $('tripDetails').textContent=((simRouteLength-simProgress)/1000).toFixed(1)+' km · simulazione';
+ const upcoming=routeSteps.find(st=>st.progress>simProgress+5);
+ if(upcoming){$('instruction').textContent=instructionText(upcoming.step);$('nextDistance').textContent=Math.round((upcoming.progress-simProgress)/10)*10+' m'}
+ simAnimation=requestAnimationFrame(simulateFrame);
+}
+$('simStart').onclick=async()=>{
+ if(simulationActive)return;
+ $('simStart').disabled=true;msg('Caricamento percorso di simulazione Terento–Brunico…');
+ try{
+  const u='https://router.project-osrm.org/route/v1/driving/'+SIM_START.join(',')+';'+SIM_END.join(',')+'?overview=full&geometries=geojson&steps=true';
+  const r=await fetch(u),j=await r.json();
+  if(!r.ok||j.code!=='Ok'||!j.routes?.length)throw Error('Servizio percorso non disponibile');
+  routeCoords=j.routes[0].geometry.coordinates;routeDistance=j.routes[0].distance;
+  prepareSimSegments();
+  routeSteps=[];
+  for(const leg of j.routes[0].legs)for(const step of leg.steps)routeSteps.push({step,progress:nearestProgress(routeCoords,step.maneuver.location)});
+  routeSteps.sort((a,b)=>a.progress-b.progress);
+  if(map.isStyleLoaded())showRoute(j.routes[0].geometry);
+  simProgress=0;simulationActive=true;following=true;navigating=false;
+  const point=sampleRoute(0);origin=point.coord;heading=point.angle;
+  cameraHeading=heading;smoothedCarHeading=heading;lastFollowTimestamp=0;map.jumpTo({center:origin,zoom:19.0,pitch:67,bearing:heading});
+  updateCar();followCar(true);showSearch(false);
+  $('simControls').style.display='flex';$('guidance').classList.add('active');$('trip').classList.add('active');
+  msg('Simulazione attiva');simLastTime=performance.now();simAnimation=requestAnimationFrame(simulateFrame);
+ }catch(e){msg('Impossibile avviare simulazione: '+e.message);$('simStart').disabled=false}
+};
+$('simStop').onclick=stopSimulation;
+setInterval(()=>{if(origin){loadSpeedLimits();showSpeedLimit()}},2000);
+$('clear').onclick=()=>{stopNavigation();if(destMarker)destMarker.remove();destMarker=null;destination=null;manualStart=null;msg('Percorso cancellato.')};renderVehicles();
+map.once('load',()=>setTimeout(gps,850));refreshTheme();
+</script>
+<script type="importmap">{"imports":{"three":"https://esm.sh/three@0.160.1","three/addons/":"https://esm.sh/three@0.160.1/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {FBXLoader} from 'three/addons/loaders/FBXLoader.js';
+const holder=document.getElementById('vehicleOverlay');
+const canvas=document.getElementById('bmw3dCanvas');
+if(holder&&canvas){
+ const W=296,H=330;
+ try{
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,premultipliedAlpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.setSize(W,H,false);
+  renderer.setClearColor(0x000000,0);
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  const scene=new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xffffff,0x586374,3.1));
+  const key=new THREE.DirectionalLight(0xffffff,3.5);key.position.set(-4,8,8);scene.add(key);
+  const fill=new THREE.DirectionalLight(0xffffff,1.5);fill.position.set(5,4,-6);scene.add(fill);
+  const camera=new THREE.PerspectiveCamera(43,W/H,0.01,1000);
+  const loader=new FBXLoader();loader.setResourcePath('./bmw2019/');
+  loader.load('bmw2019/FINAL_MODEL_19.fbx',object=>{
+   const box=new THREE.Box3().setFromObject(object), size=new THREE.Vector3(),center=new THREE.Vector3();
+   box.getSize(size);box.getCenter(center);
+   if(!Number.isFinite(size.length())||size.length()<0.0001)return;
+   object.position.sub(center);
+   const group=new THREE.Group();group.add(object);
+   const longest=Math.max(size.x,size.y,size.z);
+   group.scale.setScalar(4.89/longest);
+   // Vista posteriore leggermente dall'alto; il veicolo ruota con la mappa V15.
+   scene.add(group);
+   const upAxis=size.y<Math.min(size.x,size.z)*0.8?'y':(size.z<Math.min(size.x,size.y)*0.8?'z':'y');
+   if(upAxis==='z'){group.rotation.x=-Math.PI/2;}
+   // Correzione orientamento: mostra il posteriore, non i fari anteriori.
+   group.rotation.y=Math.PI;
+   const adjusted=new THREE.Box3().setFromObject(group),sz=new THREE.Vector3();adjusted.getSize(sz);
+   const length=Math.max(sz.x,sz.z),height=sz.y;
+   camera.position.set(0,Math.max(2.5,height*1.18),Math.max(5.2,length*1.12));
+   camera.lookAt(0,0.15,0);
+   camera.updateProjectionMatrix();
+   // Nessuna geometria rossa sovrapposta: le barre della V15.5
+   // risultavano sospese sul paraurti. Manteniamo le texture originali.
+    let visibleTurn=0, lastDrawTime=0;
+     const draw=(now)=>{
+      const dt=lastDrawTime?Math.min(0.08,(now-lastDrawTime)/1000):1/60;
+      lastDrawTime=now;
+      if(holder.style.display!=='none'){
+       const targetTurn=THREE.MathUtils.degToRad(window.mabaCarTurn||0);
+       visibleTurn+=(targetTurn-visibleTurn)*(1-Math.exp(-dt/0.20));
+       group.rotation.y=Math.PI-visibleTurn;
+       renderer.render(scene,camera);
+      }
+      requestAnimationFrame(draw);
+     };
+   holder.classList.add('has-3d');draw();
+   console.info('Maba BMW: FBX 3D caricato, modello originale conservato.');
+  },undefined,err=>{console.warn('Maba BMW: fallback immagine V15',err)});
+ }catch(e){console.warn('BMW 3D non disponibile, mantengo immagine V15',e)}
+}
+</script>
+</body></html>
