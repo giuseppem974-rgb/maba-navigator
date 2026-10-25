@@ -1,4 +1,4 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Maba Navigator V15.5 · BMW + edifici 3D</title><link href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css" rel="stylesheet"><style>
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Maba Navigator V15.9 · BMW 2019 texture originali</title><link href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css" rel="stylesheet"><style>
 *{box-sizing:border-box}body{margin:0;font:15px system-ui,Arial;background:#eef2f6}#map{height:100dvh;width:100%}.panel{position:absolute;z-index:3;top:env(safe-area-inset-top,10px);left:12px;right:12px;background:white;border-radius:17px;padding:12px;box-shadow:0 4px 22px #0003}.brand{font-weight:800;color:#1769cf;margin-bottom:9px}.search{display:flex;gap:7px}input{min-width:0;flex:1;border:1px solid #ddd;border-radius:10px;padding:12px;font-size:16px}button{border:0;border-radius:10px;padding:12px;background:#1769cf;color:white;font-weight:700;cursor:pointer}.actions{position:absolute;z-index:3;right:14px;bottom:calc(25px + env(safe-area-inset-bottom));display:grid;gap:10px}.actions button{border-radius:16px;width:56px;height:52px;font-size:19px;box-shadow:0 3px 12px #0003}.actions .secondary{background:white;color:#1769cf}.status{font-size:13px;color:#333;margin-top:8px}.vehicle-panel{position:absolute;z-index:4;bottom:95px;left:12px;right:82px;max-width:390px;background:#fff;border-radius:18px;padding:14px;box-shadow:0 4px 25px #0004;display:none}.vehicle-panel.open{display:block}.vehicle-title{font-weight:800;margin-bottom:4px}.vehicle-sub{font-size:12px;color:#596574;margin-bottom:12px}.vehicle-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.vehicle-option{background:#f0f4fa;color:#24364a;border:2px solid transparent;border-radius:12px;padding:8px 3px;display:flex;align-items:center;flex-direction:column;gap:4px;font-size:11px}.vehicle-option.active{border-color:#1769cf;background:#e6f0ff}.vehicle-option svg{width:48px;height:55px}.vehicle-close{float:right;background:transparent;color:#667;padding:0 5px;font-size:23px}.car-pin{width:60px;height:70px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 2px 3px #0007)}.car-pin svg{width:60px;height:70px}.maplibregl-ctrl-bottom-left{display:none}
 .guidance{position:absolute;z-index:5;top:125px;left:12px;right:12px;background:#1769cf;color:white;border-radius:14px;padding:12px;display:none;box-shadow:0 4px 18px #0003}.guidance.active{display:block}.guidance strong{font-size:19px}.trip{position:absolute;z-index:4;bottom:22px;left:12px;background:white;padding:12px;border-radius:14px;box-shadow:0 3px 15px #0003;display:none}.trip.active{display:block}.trip button{margin-left:8px}.speed{position:absolute;bottom:90px;left:12px;z-index:4;background:white;padding:9px;border-radius:12px;font-weight:bold} 
 :root{color-scheme:light}body{font-family:system-ui,-apple-system,Arial;background:#e9eef5;color:#172337}.panel{top:calc(10px + env(safe-area-inset-top));left:12px;right:12px;max-width:540px;margin:auto;padding:15px 15px 13px;border:1px solid #ffffffb8;border-radius:22px;box-shadow:0 14px 44px #0b25402e;backdrop-filter:blur(12px)}.brand{font-size:15px;letter-spacing:.3px;color:#112e51;margin-bottom:11px}.route-form{display:flex;gap:8px;align-items:center}.route-fields{flex:1;min-width:0;display:grid;gap:7px}.field{display:flex;align-items:center;gap:10px;background:#f2f5f9;border:1px solid #e4eaf1;border-radius:12px;padding:0 11px}.field input{background:transparent;border:0;padding:12px 0;outline:0;font-size:14px;width:100%}.dot{width:10px;height:10px;border-radius:50%;flex:none}.start-dot{background:#168aef;border:2px solid #b5dfff}.end-dot{background:#ed4b57}.swap{height:48px;width:43px;flex:none;background:#e7eef8;color:#19599c;font-size:25px;padding:0}.plan-button{width:100%;margin-top:9px;padding:13px;background:linear-gradient(125deg,#1164ca,#2697ef);border-radius:12px;font-size:15px}.status{line-height:1.35;color:#536276;margin-top:9px}.actions{right:13px;bottom:calc(102px + env(safe-area-inset-bottom));gap:9px}.actions button{width:51px;height:49px;border-radius:15px;background:#116acb}.actions .secondary{background:#fff;color:#174f8b}.vehicle-panel{bottom:calc(160px + env(safe-area-inset-bottom));right:75px}.car-pin{filter:drop-shadow(0 4px 5px #0008)}.car-pin svg{width:46px;height:61px}#guidance,#trip{border-radius:18px!important;box-shadow:0 7px 25px #0002!important}#trip{bottom:calc(14px + env(safe-area-inset-bottom))!important}
@@ -10,7 +10,7 @@ body.night .status{color:#cbd6e4}.panel.nav-hidden{display:none}.search-reopen{p
 .speed-stack{position:absolute;z-index:5;bottom:calc(92px + env(safe-area-inset-bottom));left:12px;display:grid;gap:7px}.speed-stack .speed{position:static}.limit-sign{border:5px solid #d5232e;border-radius:50%;width:65px;height:65px;background:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#222}.limit-sign.unknown{font-size:11px;text-align:center;border-color:#a8b1be}.cam-notice{position:absolute;z-index:5;top:calc(98px + env(safe-area-inset-top));right:12px;background:#fff7df;color:#533500;border-radius:12px;padding:8px;display:none;max-width:170px;font-weight:700}.cam-notice.visible{display:block}
 .settings-toggle{font-size:13px;display:flex;align-items:center;gap:8px;padding:6px}.settings-toggle input{width:auto;flex:none}
 .car-pin{width:68px!important;height:74px!important;overflow:visible!important;filter:drop-shadow(0 3px 3px #0007)!important}.car-pin img{width:68px;height:74px;object-fit:contain;display:block;transform:none!important}.car-pin.nightcar:before{content:"";position:absolute;top:-22px;left:10px;width:48px;height:45px;background:linear-gradient(to top,#fff3a14d,transparent);filter:blur(8px);pointer-events:none}
-#vehicleOverlay{position:absolute;z-index:4;left:50%;top:75%;transform:translate(-50%,-50%);width:68px;height:74px;pointer-events:none;display:none;filter:drop-shadow(0 3px 4px #0007)}#vehicleOverlay img{width:100%;height:100%;object-fit:contain}#vehicleOverlay{width:126px;height:141px}#bmw3dCanvas{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none}#vehicleOverlay.has-3d #bmw3dCanvas{display:block}#vehicleOverlay.has-3d:not(.nightcar)::before{content:"";position:absolute;z-index:-1;left:43%;top:25%;width:14%;height:65%;border-radius:15px;background:#eeeab0;opacity:.85;pointer-events:none}#vehicleOverlay.has-3d #bmwFallback{display:none}#vehicleOverlay.nightcar:before{content:"";position:absolute;left:9px;top:-50px;width:50px;height:60px;background:linear-gradient(to top,#fff9c58c 0%,#fff8c447 40%,transparent 100%);filter:blur(9px)}#vehicleOverlay.nightcar:after{content:none}
+#vehicleOverlay{position:absolute;z-index:4;left:50%;top:75%;transform:translate(-50%,-50%);width:68px;height:74px;pointer-events:none;display:none;filter:drop-shadow(0 3px 4px #0007)}#vehicleOverlay img{width:100%;height:100%;object-fit:contain}#vehicleOverlay{width:126px;height:141px}#bmw3dCanvas{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none}#vehicleOverlay.has-3d #bmw3dCanvas{display:block}#vehicleOverlay.has-3d::after{content:"";position:absolute;left:33%;top:29%;width:34%;height:48%;background:rgba(22,23,26,.92);border-radius:38% 38% 26% 26%;transform:translateZ(0);z-index:0;pointer-events:none}#vehicleOverlay.has-3d #bmw3dCanvas{z-index:1}#vehicleOverlay.has-3d #bmwFallback{display:none}#vehicleOverlay.nightcar:before{content:"";position:absolute;left:9px;top:-50px;width:50px;height:60px;background:linear-gradient(to top,#fff9c58c 0%,#fff8c447 40%,transparent 100%);filter:blur(9px)}#vehicleOverlay.nightcar:after{content:none}
 .guidance{top:calc(68px + env(safe-area-inset-top))!important;left:12px!important;right:12px!important;padding:9px 12px!important;border-radius:13px!important;max-height:75px;overflow:hidden;background:#102f58!important}.guidance strong{font-size:14px!important;font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.guidance #nextDistance{font-size:18px;font-weight:800;margin-top:1px}body.night .guidance{background:#0b2241!important}
 #zoomControls{position:absolute;z-index:8;right:13px;top:42%;display:grid;gap:8px}#zoomControls button{background:#fff;color:#183858;font-size:26px;width:49px;height:49px;padding:0;box-shadow:0 3px 12px #0004}
 .cam-marker{font-size:23px;background:#fff;border:2px solid #db4141;border-radius:50%;width:35px;height:35px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px #0005}
@@ -74,7 +74,7 @@ function maptilerStyle(mode){
  return `https://api.maptiler.com/maps/${name}/style.json?key=${encodeURIComponent(mapKey)}`;
 }
 function activateMapStyle(){
- if(!mapKey){$('keyModal').classList.add('open');msg('Inserisci la chiave MapTiler per le mappe 3D.');return}
+ if(!mapKey){$('keyModal').classList.add('open');msg('Per edifici e rilievi 3D serve una chiave MapTiler valida.');return}
  const wanted=mapMode==='sat3d'?'sat3d':(nightActive?'road-night':'road');
  if(mapStyleType===wanted&&!styleSwitching){install3D();applyModeView();return}
  styleSwitching=true;terrainReady=false;buildingsReady=false;
@@ -377,34 +377,21 @@ if(holder&&canvas){
    box.getSize(size);box.getCenter(center);
    if(!Number.isFinite(size.length())||size.length()<0.0001)return;
    object.position.sub(center);
-   // Vernice nera metallizzata: mantieni texture di fanali, vetri, gomme e interni.
-   // Scuriamo solo materiali carrozzeria chiaramente blu; i materiali sono clonati
-   // per non alterare le texture condivise del modello.
-   let painted=0;
+   // Mantieni TUTTI i materiali e le texture originali del modello 2019.
+   // Non ricolorare ogni mesh: oscurava vetri, ruote, fanali e interni.
    object.traverse(node=>{
     if(!node.isMesh||!node.material)return;
-    const materials=Array.isArray(node.material)?node.material:[node.material];
-    node.material=materials.map(material=>{
-     if(!material)return material;
-     const m=material.clone();
-     const name=((m.name||'')+' '+(node.name||'')).toLowerCase();
-     if(/light|lamp|rear|tail|glass|window|tire|tyre|wheel|rim|seat|interior|emblem|badge|chrome|metal|grill|plastic|rubber|number|plate|mirror/.test(name))return m;
-     const c=m.color;
-     // Rileva blu scuro (componente blu dominante), tipico della carrozzeria originale.
-     if(c && c.b>c.r*1.18 && c.b>c.g*1.08 && c.b>0.035){
-      c.setRGB(0.105,0.112,0.125);
-      if('metalness' in m)m.metalness=0.72;
-      if('roughness' in m)m.roughness=0.29;
-      painted++;
-     }
-     return m;
-    });
-    if(!Array.isArray(node.material))node.material=node.material[0];
+    const mats=Array.isArray(node.material)?node.material:[node.material];
+    for(const mat of mats){
+     if(!mat)continue;
+     if(mat.map){mat.map.colorSpace=THREE.SRGBColorSpace;mat.map.needsUpdate=true;}
+     // Il modello resta completo: nessun materiale viene sostituito.
+     mat.needsUpdate=true;
+    }
    });
-   console.info('Maba BMW 2019: materiali carrozzeria adattati',painted);
    const group=new THREE.Group();group.add(object);
    const longest=Math.max(size.x,size.y,size.z);
-   group.scale.setScalar(4.55/longest);
+   group.scale.setScalar(4.65/longest);
    // Vista posteriore leggermente dall'alto; il veicolo ruota con la mappa V15.
    scene.add(group);
    const upAxis=size.y<Math.min(size.x,size.z)*0.8?'y':(size.z<Math.min(size.x,size.y)*0.8?'z':'y');
@@ -431,7 +418,7 @@ if(holder&&canvas){
       requestAnimationFrame(draw);
      };
    holder.classList.add('has-3d');draw();
-   console.info('Maba BMW 2019: modello 3D caricato, nero metallizzato e scala ridotta.');
+   console.info('Maba BMW 2019: materiali originali, texture e fanali conservati.');
   },undefined,err=>{console.warn('Maba BMW: fallback immagine V15',err)});
  }catch(e){console.warn('BMW 3D non disponibile, mantengo immagine V15',e)}
 }
